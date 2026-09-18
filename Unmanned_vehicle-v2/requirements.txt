@@ -1,0 +1,39 @@
+# =============================================================================
+# SIH-26126 UGV -- Layer-1 Perception : Python dependencies
+# =============================================================================
+# Tested with Python 3.10 / 3.11 on Windows. Use a virtual environment.
+#
+#   py -3.11 -m venv .venv
+#   .venv\Scripts\activate
+#   python -m pip install --upgrade pip
+#
+# Then install PyTorch FIRST (see the two options below), then this file:
+#   pip install -r requirements.txt
+# -----------------------------------------------------------------------------
+
+# ---- core (safe to pip install directly) ------------------------------------
+numpy>=1.24,<2.3
+opencv-python>=4.8            # camera capture, resize, drawing, windows
+ultralytics>=8.3.0           # YOLO11n-seg (pulls in its own deps)
+timm>=0.9.0                  # required by MiDaS backbones from torch.hub
+scipy>=1.10                  # used by some MiDaS transforms / robust fits
+
+# ---- PyTorch : DO NOT rely on the lines below alone -------------------------
+# torch/torchvision must match your CUDA. Install them BEFORE this file using
+# ONE of the following, then leave these two commented out.
+#
+#   GPU (NVIDIA, CUDA 12.1) -- strongly recommended for real-time:
+#     pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+#
+#   CPU only (works, but MiDaS+YOLO will be slow -- lower *_FPS in config.py):
+#     pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+#
+# torch>=2.1
+# torchvision>=0.16
+
+# -----------------------------------------------------------------------------
+# NOTE: the FIRST run needs internet -- ultralytics downloads yolo11n-seg.pt and
+# torch.hub downloads the MiDaS weights. After that it runs fully offline.
+# If you already have your own MiDaS weights, point config.MIDAS_CUSTOM_WEIGHTS
+# at them to skip the hub download.
+# -----------------------------------------------------------------------------
